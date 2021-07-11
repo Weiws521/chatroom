@@ -2,6 +2,7 @@ package pers.oliverwee.chatroom.web.websocket;
 
 import org.springframework.web.socket.WebSocketSession;
 
+import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import java.util.Collections;
 import java.util.HashSet;

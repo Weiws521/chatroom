@@ -1,7 +1,9 @@
 package pers.oliverwee.chatroom.web.controller;
 
+import org.apache.catalina.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.converter.SimpleMessageConverter;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -36,8 +38,10 @@ public class ChatroomController {
      */
     @GetMapping(value = "/joinRoom", produces = {"application/json;charset=UTF-8"})
     @ResponseBody
+    @SendTo("")
     public ResultData<Set<String>> joinRoom(@RequestParam("roomId") String roomId,
-                                          @RequestParam("userId") String userId) {
+                                            @RequestParam("userId") String userId) {
+        RoomManager.joinRoom(null, userId,roomId);
         Set<String> userSet = RoomManager.getAllUserByRoom(roomId)
                 .stream()
                 .filter(userStreamId -> !userStreamId.equals(userId))
@@ -56,6 +60,7 @@ public class ChatroomController {
     @ResponseBody
     public ResultData<Set<String>> leaveRoom(@RequestParam("roomId") String roomId,
                                                        @RequestParam("userId") String userId) {
+        RoomManager.leaveRoom(userId, roomId);
         Set<String> userSet = RoomManager.getAllUserByRoom(roomId)
                 .stream()
                 .filter(userStreamId -> !userStreamId.equals(userId))
